@@ -1,0 +1,67 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <title></title>
+</head>
+<style>
+    @import url(http://fonts.googleapis.com/css?family=Roboto);
+    body{
+        background-color: #121212;
+        font-family: 'Roboto', sans-serif;
+    }
+
+    .center {
+        color: white;
+        position: absolute;
+        top: 50%;
+        left: 50%;
+        transform: translate(-50%, -50%);
+        font-size: 3em;
+        text-align: center;
+    }
+
+    #logo {
+        position: absolute;
+        left: 50%;
+        top: 10%;
+        transform: translate(-50%, 0)
+    }
+</style>
+
+<body>
+<img id="logo" src="http://red.devwars.tv/logo.png">
+<div class="center">
+    <div>Next DevWars in:</div>
+    <div id="countdown"></div>
+</div>
+
+<script src="countdown.min.js"></script>
+<script>
+    var xmlhttp = new XMLHttpRequest();
+    var url = "http://devwars.tv/v1/game/upcoming";
+
+    xmlhttp.onreadystatechange = function() {
+        if (xmlhttp.readyState == 4 && xmlhttp.status == 200) {
+            var data = JSON.parse(xmlhttp.responseText);
+            handleResponse(data);
+        }
+    };
+    xmlhttp.open("GET", url, true);
+    xmlhttp.send();
+
+    function handleResponse(data) {
+        console.log(data);
+        if(data.length >= 1) {
+            var time = data[0].timestamp;
+
+            setInterval(function () {
+                document.getElementById("countdown").innerHTML = countdown(new Date(time));
+            }, 1000);
+        }
+    }
+
+
+</script>
+</body>
+</html>
